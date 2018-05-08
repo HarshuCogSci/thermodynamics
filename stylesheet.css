@@ -1,0 +1,34 @@
+body{
+  margin: 0px;
+}
+
+.heading{
+  -webkit-text-fill-color: dimgrey;
+}
+
+.monospace{
+  font-family: monospace;
+}
+
+.subHeading{
+  font-family: monospace;
+  font-size: 1.5em;
+  -webkit-text-fill-color: dimgrey;
+  font-weight: bold;
+}
+
+.axes_label{
+  dominant-baseline: middle;
+  text-anchor: middle;
+  fill: black;
+  font-size: 0.8em;
+  font-family: sans-serif;
+}
+
+.hidden{
+  display: none;
+}
+
+.shown{
+  display: null;
+}

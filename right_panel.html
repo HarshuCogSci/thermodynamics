@@ -1,0 +1,85 @@
+<p class = 'mt-5 subHeading' id = 'processHeading'></p>
+
+<p class = 'text-justify px-5 monospace' id = 'processDescription'></p>
+<div class = 'text-justify' id = 'processFormula'></div>
+
+<div class = 'row mt-4'>
+
+  <div class = 'col-md-6'>
+    <div class = 'card'>
+      <div class = 'card-header'>State 1</div>
+      <div class = 'card-body text-justify'>
+        <div style = 'margin-left: 0%'>
+
+          <div>
+            <input id = 's1_p_check' class = 's1_check s_check' type = 'checkbox' data = 'p' state = 'state_1'></input>
+            <span>(p:) </span>
+            <input id = 's1_p_input' class = 's1_input s_input' type = 'number' data = 'p' state = 'state_1'></input>
+            (kPa)
+          </div>
+
+          <div class = 'my-3'>
+            <input id = 's1_v_check' class = 's1_check s_check' type = 'checkbox' data = 'v' state = 'state_1'></input>
+            <span>(v:) </span>
+            <input id = 's1_v_input' class = 's1_input s_input' type = 'number' data = 'v' state = 'state_1'></input>
+            (m^3/kg)
+          </div>
+
+          <div>
+            <input id = 's1_T_check' class = 's1_check s_check' type = 'checkbox' data = 'T' state = 'state_1'></input>
+            <span>(T:) </span>
+            <input id = 's1_T_input' class = 's1_input s_input' type = 'number' data = 'T' state = 'state_1'></input>
+            (K)
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class = 'col-md-6'>
+    <div class = 'card'>
+      <div class = 'card-header'>State 2</div>
+      <div class = 'card-body text-justify'>
+        <div style = 'margin-left: 0%'>
+
+          <div>
+            <input id = 's2_p_check' class = 's2_check s_check' type = 'checkbox' data = 'p' state = 'state_2'></input>
+            <span>(p:) </span>
+            <input id = 's2_p_input' class = 's2_input s_input' type = 'number' data = 'p' state = 'state_2'></input>
+            (kPa)
+          </div>
+
+          <div class = 'my-3'>
+            <input id = 's2_v_check' class = 's2_check s_check' type = 'checkbox' data = 'v' state = 'state_2'></input>
+            <span>(v:) </span>
+            <input id = 's2_v_input' class = 's2_input s_input' type = 'number' data = 'v' state = 'state_2'></input>
+            (m^3/kg)
+          </div>
+
+          <div>
+            <input id = 's2_T_check' class = 's2_check s_check' type = 'checkbox' data = 'T' state = 'state_2'></input>
+            <span>(T:) </span>
+            <input id = 's2_T_input' class = 's2_input s_input' type = 'number' data = 'T' state = 'state_2'></input>
+            (K)
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class = 'text-justify px-5 mt-2 monospace'>
+    *Check the boxes for the parameters which are known
+  </p>
+
+</div>
+
+<div class = 'mt-2'>
+  Change Process:
+  <select id = 'process_Input'>
+    <option value = 'Adiabatic'>Adiabatic</option>
+    <option value = 'Isothermal'>Isothermal</option>
+    <option value = 'Isobaric'>Isobaric</option>
+  </select>
+</div>

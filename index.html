@@ -1,0 +1,122 @@
+<html lang="en">
+<head>
+  <title>Thermodynamic Processes</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1.0,maximum-scale=1.0"/>
+</head>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://d3js.org/d3-selection-multi.v1.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.16.3/math.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({ extensions: ["tex2jax.js"], jax: ["input/TeX","output/HTML-CSS"], tex2jax: { inlineMath: [["\(","\)"]] } }); </script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="stylesheet.css">
+
+<script src="gas_law.js"></script>
+<script src="adiabatic_process.js"></script>
+<script src="isothermal_process.js"></script>
+<script src="isobaric_process.js"></script>
+<script src="input_box.js"></script>
+<script src="check_box.js"></script>
+<script src="graph.js"></script>
+
+<body>
+  <div class = 'container text-center'>
+    <div class = 'my-3 heading'> <h4>Thermodynamic Processes<h4> </div>
+      <div class = 'row'>
+        <div class = 'col-md-6' id = 'left_panel'></div>
+        <div class = 'col-md-6' id = 'right_panel'></div>
+      </div>
+  </div>
+</body>
+
+<script>
+
+/********************************************************************************/
+// Parameters
+
+Array.prototype.last = function(){ return this[ this.length-1 ]; }
+var num_Points = 200;
+
+var R_air = 287, γ_air = 1.4;
+var ambient = { p: 100, T: 300 };
+ambient.v = getVolume(ambient.p, ambient.T);
+
+var params = {
+  p: {min: 0, max: 300, step: 1, name: 'Pressure'},
+  v: {min: 0, max: 1, step: 0.01, name: 'Specific Volume'},
+  T: {min: 0, max: 500, step: 1, name: 'Temperaure'}
+};
+
+/********************************************************************************/
+// Processes
+
+var process_1 = new adiabatic_process();
+var process_2 = new isothermal_process();
+var process_3 = new isobaric_process();
+var process_current = null;
+
+function assign_Process(process){
+  process_current = process;
+  inputBox.assignValues(process_current); inputBox.activate(process_current); inputBox.events(process_current);
+  checkBox.check(process_current); checkBox.activate(process_current); checkBox.events(process_current);
+  graph.process = process_current; graph.create(); graph.events(); graph.setup(); graph.update();
+
+  if(process_current.process == 'Adiabatic'){
+    d3.select('#processHeading').html('Adiabatic Process');
+    d3.select('#processDescription').html('Adiabatic Processes are thermodynamic processes where there is no heat exchange between the system and the surroundings during the process.');
+    d3.select('#processFormula').html('$$ pv^γ = constant $$');
+  }
+
+  if(process_current.process == 'Isothermal'){
+    d3.select('#processHeading').html('Isothermal Process');
+    d3.select('#processDescription').html('Isothermal Processes are thermodynamic processes where the temperature remains constant during the process.');
+    d3.select('#processFormula').html('$$ T = constant $$');
+  }
+
+  if(process_current.process == 'Isobaric'){
+    d3.select('#processHeading').html('Isobaric Process');
+    d3.select('#processDescription').html('Isobaric Processes are thermodynamic processes where the pressure remains constant during the process.');
+    d3.select('#processFormula').html('$$ p = constant $$');
+  }
+
+  MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+}
+
+/********************************************************************************/
+// Setting up
+
+$(document).ready(function(){ setup(); })
+
+function setup(){
+  $('#left_panel').load('left_panel.html', function(){
+    $('#right_panel').load('right_panel.html', function(){
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+      $('.s_input').each(function(){
+        var par = d3.select(this).attr('data');
+        d3.select(this).attrs({ min: params[par].min, max: params[par].max, step: params[par].step });
+      })
+
+      assign_Process(process_1);
+      d3.select('#process_Input').on('change', function(){
+        if(this.value == 'Adiabatic'){ assign_Process(process_1); }
+        if(this.value == 'Isothermal'){ assign_Process(process_2); }
+        if(this.value == 'Isobaric'){ assign_Process(process_3); }
+      })
+
+    })
+  })
+}
+
+</script>
